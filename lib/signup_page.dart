@@ -11,11 +11,11 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
-    List images = [
+    /*List images = [
       "g.png",
       "t.png",
       "f.png",
-    ];
+    ];*/
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -29,7 +29,7 @@ class SignUpPage extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
-                          "img/signup.png"
+                          "img/svg.png"
                       ),
                       fit: BoxFit.cover
                   ),
@@ -41,7 +41,7 @@ class SignUpPage extends StatelessWidget {
                   backgroundColor: Colors.white70,
                   radius: 60,
                   backgroundImage: AssetImage(
-                    "img/profile1.png"
+                    "img/ProfilePictureMaker.png"
                   ),
                 ),
               ],
@@ -71,7 +71,7 @@ class SignUpPage extends StatelessWidget {
                       controller: emailController,
                       decoration: InputDecoration(
                         hintText: "Email Address",
-                          prefixIcon: Icon(Icons.email, color:Colors.deepOrangeAccent),
+                          prefixIcon: Icon(Icons.email, color:Color.fromRGBO(252, 198, 205, 100)),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -110,7 +110,7 @@ class SignUpPage extends StatelessWidget {
                       controller: passwordController,
                       decoration: InputDecoration(
                           hintText: "Password",
-                          prefixIcon: Icon(Icons.password_outlined, color:Colors.deepOrangeAccent),
+                          prefixIcon: Icon(Icons.password_outlined, color:Color.fromRGBO(252, 198, 205, 100)),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -138,7 +138,7 @@ class SignUpPage extends StatelessWidget {
           SizedBox(height: 70,),
           GestureDetector(
             onTap: () {
-              AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
+              //AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
             },
             child: Container(
                 width: w * 0.5,
@@ -147,7 +147,7 @@ class SignUpPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   image: DecorationImage(
                       image: AssetImage(
-                          "img/loginbtn.png"
+                          "img/mesh.png"
                       ),
                       fit: BoxFit.cover
                   ),
@@ -176,15 +176,15 @@ class SignUpPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: w * 0.1),
-          RichText(text: TextSpan(
+          /*RichText(text: TextSpan(
               text: "Sign Up using one of the following methods",
               style: TextStyle(
                 color:Colors.grey[500],
                 fontSize: 16,
               ),
           ),
-          ),
-          Wrap(
+          ),*/
+      /*    Wrap(
             children: List<Widget>.generate( 3, (index){
               return Padding(
                 padding:const EdgeInsets.all(10.0),
@@ -200,7 +200,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               );
             } )
-          )
+          )*/
         ],
       ),
     );

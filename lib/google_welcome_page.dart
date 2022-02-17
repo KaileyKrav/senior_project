@@ -1,21 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:senior_project/calendar.dart';
 import 'auth_controller.dart';
 import 'google_sign_in.dart';
 
 //Using sample UI from a tutorial, Will change later
-class WelcomePage extends StatelessWidget {
-  String email;
-  WelcomePage({Key? key, required this.email}) : super(key: key);
-
-  void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Calendar()));
-  }
-
+/*
+class GoogleWelcomePage extends StatelessWidget {
+  //final email;
+  const GoogleWelcomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
+
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
 
@@ -29,7 +26,7 @@ class WelcomePage extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                      "img/svg.png"
+                      "img/signup.png"
                   ),
                   fit: BoxFit.cover
               ),
@@ -38,11 +35,8 @@ class WelcomePage extends StatelessWidget {
               children: [
                 SizedBox(height: h * 0.14,),
                 CircleAvatar(
-                  //backgroundColor: Colors.white70,
                   radius: 60,
-                  backgroundImage: AssetImage(
-                      "img/ProfilePictureMaker.png"
-                  ),
+                  backgroundImage: NetworkImage(user.photoURL!),
                 ),
               ],
             ),
@@ -63,7 +57,7 @@ class WelcomePage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  email,
+                  user.email!,
                   style:TextStyle(
                     fontSize: 18,
                     color: Colors.grey[500],
@@ -72,12 +66,12 @@ class WelcomePage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 100,),
+          SizedBox(height: 200,),
           GestureDetector(
             onTap: () {
-              //final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-              //provider.googleLogOut();
-              AuthController.instance.logOut();
+              final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.googleLogOut();
+              //AuthController.instance.logOut();
             },
             child: Container(
                 width: w * 0.5,
@@ -86,7 +80,7 @@ class WelcomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   image: DecorationImage(
                       image: AssetImage(
-                          "img/mesh.png"
+                          "img/loginbtn.png"
                       ),
                       fit: BoxFit.cover
                   ),
@@ -100,36 +94,7 @@ class WelcomePage extends StatelessWidget {
                         color:Colors.white,
                       )
                   ),
-                ),
-            ),
-          ),
-          SizedBox(height: 50,),
-          GestureDetector(
-            onTap: () {
-              _navigateToNextScreen(context);
-            },
-            child: Container(
-              width: w * 0.5,
-              height: h * 0.08,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                image: DecorationImage(
-                    image: AssetImage(
-                        "img/mesh.png"
-                    ),
-                    fit: BoxFit.cover
-                ),
-              ),
-              child: Center(
-                child: Text(
-                    "Next Page",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color:Colors.white,
-                    )
-                ),
-              ),
+                )
             ),
           ),
         ],
@@ -137,3 +102,5 @@ class WelcomePage extends StatelessWidget {
     );
   }
 }
+
+ */

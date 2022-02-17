@@ -1,11 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:senior_project/camera_bpm/calc_heart.dart';
+import 'package:senior_project/google_welcome_page.dart';
 import 'package:senior_project/welcome_page.dart';
 
 import 'login_page.dart';
 
 class AuthController extends GetxController {
+  bool pass = false;
   static AuthController instance = Get.find();
   late Rx<User?> _user;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -19,10 +23,18 @@ class AuthController extends GetxController {
   }
 
   _initialScreen(User? user) {
+    /*for (UserInfo user in FirebaseAuth.instance.currentUser!.providerData) {
+      if (user.providerId == "password") {
+        pass = true;
+      }
+    }*/
     if(user == null) {
       print("login page");
       Get.offAll(()=>LoginPage());
     }
+    //else if (pass == false){
+      //Get.offAll(()=>GoogleWelcomePage());
+    //}
     else {
       Get.offAll(()=>WelcomePage(email:user.email!));
     }
@@ -60,7 +72,7 @@ class AuthController extends GetxController {
         backgroundColor: Colors.redAccent,
         snackPosition: SnackPosition.BOTTOM,
         titleText: Text(
-          "Login failed",
+          "Logint failed",
           style: TextStyle(
             color: Colors.white,
           ),
