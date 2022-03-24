@@ -1,19 +1,43 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:senior_project/auth_controller.dart';
+import 'package:senior_project/google_sign_in.dart';
+import 'package:senior_project/signup_page.dart';
+import 'package:senior_project/test_calendar.dart';
+
+import 'camera_bpm/calc_heart.dart';
+import 'med_list.dart';
 
 //Using sample UI from a tutorial, Will change later
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class AddMed extends StatefulWidget {
+  const AddMed({Key? key}) : super(key: key);
+
+  @override
+  _AddMedState createState() => _AddMedState();
+}
+
+class _AddMedState extends State<AddMed> {
+
+  void _navigateToList(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => MedList()));
+  }
+
+  void _navigateToCalendar(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestCalendar()));
+  }
+
+  void _navigateToHeart(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CalcHeartPage()));
+  }
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -22,27 +46,16 @@ class SignUpPage extends StatelessWidget {
       body: Column(
         children: [
           Container(
-              width: w,
-              height: h * 0.3,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                          "img/svg.png"
-                      ),
-                      fit: BoxFit.cover
+            width: w,
+            height: h * 0.3,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                    //"img/loginimg.png"
+                      "img/svg.png"
                   ),
+                  fit: BoxFit.cover
               ),
-            child: Column(
-              children: [
-                SizedBox(height: h * 0.14,),
-                CircleAvatar(
-                  backgroundColor: Colors.white70,
-                  radius: 60,
-                  backgroundImage: AssetImage(
-                    "img/ProfilePictureMaker.png"
-                  ),
-                ),
-              ],
             ),
           ),
           Container(
@@ -51,7 +64,6 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 50,),
                 Container(
                   decoration: BoxDecoration(
                       color:Colors.white,
@@ -68,8 +80,8 @@ class SignUpPage extends StatelessWidget {
                   child: TextField(
                       controller: emailController,
                       decoration: InputDecoration(
-                        hintText: "Email Address",
-                          prefixIcon: Icon(Icons.email, color:Color.fromRGBO(252, 198, 205, 100)),
+                          hintText: "Medication Name",
+                          //prefixIcon: Icon(Icons., color:Color.fromRGBO(252, 198, 205, 100)),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -107,8 +119,8 @@ class SignUpPage extends StatelessWidget {
                   child: TextField(
                       controller: passwordController,
                       decoration: InputDecoration(
-                          hintText: "Password",
-                          prefixIcon: Icon(Icons.password_outlined, color:Color.fromRGBO(252, 198, 205, 100)),
+                          hintText: "Medication Type",
+                          //prefixIcon: Icon(Icons.password, color:Color.fromRGBO(252, 198, 205, 100)),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -129,22 +141,19 @@ class SignUpPage extends StatelessWidget {
                       )
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
+                Row(
+                    children: [
+                      Expanded(child: Container(),),
+                    ],
+                ),
               ],
             ),
           ),
-          SizedBox(height: 70,),
+          SizedBox(height: 50,),
           GestureDetector(
-            onTap: () {
-              auth.createUserWithEmailAndPassword(
-                  email: emailController.text.trim(), 
-                  password: passwordController.text.trim()).then((value) {
-                    FirebaseFirestore.instance.collection("UserData").doc(value.user?.uid).set({
-                      "email": value.user?.email
-                    });
-              }
-              );
-              //AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
+            onTap: (){
+              //AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
             },
             child: Container(
                 width: w * 0.5,
@@ -160,7 +169,7 @@ class SignUpPage extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                      "Sign Up",
+                      "Add",
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
@@ -170,20 +179,26 @@ class SignUpPage extends StatelessWidget {
                 )
             ),
           ),
-          SizedBox(height: 10,),
-          RichText(
-            text:TextSpan(
-              recognizer:TapGestureRecognizer()..onTap=()=>Get.back(),
-              text:"Have an account?",
-              style: TextStyle(
-                fontSize: 20,
-                color:Colors.grey[500]
-              ),
-            ),
-          ),
-          SizedBox(height: w * 0.1),
         ],
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
+              _navigateToList(context);
+            }),
+            Spacer(),
+            IconButton(icon: Icon(Icons.calendar_today), onPressed: () {
+              _navigateToCalendar(context);
+            }),
+            IconButton(icon: Icon(Icons.favorite), onPressed: () {
+              _navigateToHeart(context);
+            }),
+          ],
+        ),
+      ),
+
     );
   }
 }
+

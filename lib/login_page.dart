@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                           color:Colors.grey[500]
                       ),
                   ),
-                  SizedBox(height: 50,),
+                  SizedBox(height: 40,),
                   Container(
                     decoration: BoxDecoration(
                       color:Colors.white,
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(height: 70,),
+            SizedBox(height: 50,),
             GestureDetector(
               onTap: (){
                 AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());

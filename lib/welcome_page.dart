@@ -2,16 +2,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_project/calendar.dart';
+import 'package:senior_project/camera_bpm/calc_heart.dart';
+import 'package:senior_project/test_calendar.dart';
 import 'auth_controller.dart';
 import 'google_sign_in.dart';
+import 'med_list.dart';
 
 //Using sample UI from a tutorial, Will change later
 class WelcomePage extends StatelessWidget {
   String email;
   WelcomePage({Key? key, required this.email}) : super(key: key);
 
-  void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Calendar()));
+  void _navigateToList(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => MedList()));
+  }
+
+  void _navigateToCalendar(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestCalendar()));
+  }
+
+  void _navigateToHeart(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CalcHeartPage()));
   }
 
   @override
@@ -104,7 +115,7 @@ class WelcomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 50,),
-          GestureDetector(
+          /*GestureDetector(
             onTap: () {
               _navigateToNextScreen(context);
             },
@@ -131,8 +142,24 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
             ),
-          ),
+          ),*/
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
+              _navigateToList(context);
+            }),
+            Spacer(),
+            IconButton(icon: Icon(Icons.calendar_today), onPressed: () {
+              _navigateToCalendar(context);
+            }),
+            IconButton(icon: Icon(Icons.favorite), onPressed: () {
+              _navigateToHeart(context);
+            }),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -40,9 +42,12 @@ class AuthController extends GetxController {
     }
   }
 
-  void register(String email, password) async {
+  void register(String email, password)  {
     try {
-      await auth.createUserWithEmailAndPassword(email: email, password: password);
+        auth.createUserWithEmailAndPassword(
+           email: email, 
+           password: password
+       );
     }
     catch(e) {
       Get.snackbar("About User", "User message",

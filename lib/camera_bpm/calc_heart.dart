@@ -144,12 +144,16 @@ class CalcHeartPageView extends State<CalcHeartPage> {
                 child: Center(
                   child: _controller == null
                       ? Container()
-                      : CameraPreview(_controller!),
+                      : ClipOval(child: CameraPreview(_controller!)),
                 ),
               ),
               Expanded(
                 child: Center(
-                  child: Text(_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--"),
+                  child: Text(_bpm > 30 && _bpm < 150 ? _bpm.toString() : "--",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )),
                 ),
               ),
             ],
@@ -176,10 +180,18 @@ class CalcHeartPageView extends State<CalcHeartPage> {
         child: Container(
           margin: EdgeInsets.all(12),
         decoration: BoxDecoration(
+            color: Colors.white70,
           borderRadius: BorderRadius.all(
             Radius.circular(18),
           ),
-          color: Colors.white70,
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 10,
+                spreadRadius: 7,
+                offset: Offset(1, 1),
+                color:Colors.grey.withOpacity(0.2)
+            )
+          ]
         ),
           child: BPMChart(_data),
       ),
