@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:senior_project/test_calendar.dart';
@@ -100,11 +101,31 @@ class MedList extends StatelessWidget {
   }
 
   final db = FirebaseFirestore.instance;
+  String? uid = FirebaseAuth.instance.currentUser?.uid;
+  
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: db.collection('posts').snapshots(),
+      body: Column(
+        children: [
+          Container(
+            width: w,
+            height: h * 0.3,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                    //"img/loginimg.png"
+                      "img/svg.png"
+                  ),
+                  fit: BoxFit.cover
+              ),
+            ),
+          ),
+      Expanded(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -121,12 +142,15 @@ class MedList extends StatelessWidget {
                       backgroundColor: Colors.white,
                       radius: 30,
                     ),
-                    title: Text(doc['title']),
+                    title: Text(doc['MedName']),
                   ),
                 );
               }).toList(),
             );
         },
+      ),
+      ),
+      ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
