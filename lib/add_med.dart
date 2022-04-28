@@ -4,17 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:senior_project/auth_controller.dart';
-import 'package:senior_project/google_sign_in.dart';
-import 'package:senior_project/signup_page.dart';
 import 'package:senior_project/test_calendar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:senior_project/icons/custom_icons_icons.dart';
 import 'camera_bpm/calc_heart.dart';
 import 'med_list.dart';
+import 'package:weekday_selector/weekday_selector.dart';
 
 //Using sample UI from a tutorial, Will change later
 class AddMed extends StatefulWidget {
@@ -55,10 +51,50 @@ class _AddMedState extends State<AddMed> {
     return type;
 }
 
+medDays() {
+  List<String> daysOfWeek = [];
+    for (int i = 0; i < 7; i++) {
+      if (values[i] == false) {
+        switch(i) {
+          case 0: {
+            daysOfWeek.add("Sn");
+          }
+          break;
+          case 1: {
+            daysOfWeek.add("M");
+          }
+          break;
+          case 2: {
+            daysOfWeek.add("T");
+          }
+          break;
+          case 3: {
+            daysOfWeek.add("W");
+          }
+          break;
+          case 4: {
+            daysOfWeek.add("Th");
+          }
+          break;
+          case 5: {
+            daysOfWeek.add("F");
+          }
+          break;
+          case 6: {
+            daysOfWeek.add("S");
+          }
+          break;
+        }
+      }
+    }
+    return daysOfWeek;
+}
+
   var nameController = TextEditingController();
   var typeController = TextEditingController();
   var dateInput = TextEditingController();
   var quantityController = TextEditingController();
+  var timeController = TextEditingController();
   final db = FirebaseFirestore.instance;
   String? uid = FirebaseAuth.instance.currentUser?.uid;
   String medType = '';
@@ -72,6 +108,7 @@ class _AddMedState extends State<AddMed> {
   bool p = false;
   bool l = false;
   bool s = false;
+  final values = List.filled(7, true);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +117,8 @@ class _AddMedState extends State<AddMed> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: [
           Container(
             width: w,
@@ -93,17 +131,21 @@ class _AddMedState extends State<AddMed> {
                   fit: BoxFit.cover
               ),
             ),
+          ),
+            Container(
+              width: w,
+              margin: const EdgeInsets.only(left:20, right:20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              //mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
               "Add a medication",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: Colors.black,
               ),
-              textAlign: TextAlign.center,
             )
             ],
             ),
@@ -114,7 +156,7 @@ class _AddMedState extends State<AddMed> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Text(
                   "Type",
                   style: TextStyle(
@@ -133,8 +175,8 @@ class _AddMedState extends State<AddMed> {
                       ElevatedButton(
                         child: SizedBox(
                             width: 50,
-                            height: 50,
-                            child: Icon(Icons.remove_circle_outline),//Image.asset('img/pills_graphic.png')
+                            height: 70,
+                            child: Icon(Icons.remove_circle_outline, size: 40,),//Image.asset('img/pills_graphic.png')
                         ),
                         onPressed: () {
                           if(l == true || s == true) {
@@ -149,14 +191,14 @@ class _AddMedState extends State<AddMed> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
-                          onPrimary: Colors.grey,
+                          onPrimary: Colors.black,
                         ),
                       ),
                       ElevatedButton(
                         child: SizedBox(
                             width: 50,
-                            height: 50,
-                            child: Icon(Icons.medication),//Image.asset('img/bottle_graphic.png')
+                            height: 70,
+                            child: Icon(Icons.medication, size: 40,),//Image.asset('img/bottle_graphic.png')
                         ),
                         onPressed: () {
                           if(p == true || s == true) {
@@ -171,14 +213,14 @@ class _AddMedState extends State<AddMed> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
-                          onPrimary: Colors.grey,
+                          onPrimary: Colors.black,
                         ),
                       ),
                       ElevatedButton(
                         child: SizedBox(
                             width: 50,
-                            height: 50,
-                            child: Icon(CustomIcons.vaccines_black_24dp),//Image.asset('img/shot_graphic.png')
+                            height: 70,
+                            child: Image.asset('img/outline_vaccines_black_24dp.png'),
                         ),
                         onPressed: () {
                           if(l == true || p == true) {
@@ -195,15 +237,15 @@ class _AddMedState extends State<AddMed> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
-                          onPrimary: Colors.grey,
+                          onPrimary: Colors.black,
                         ),
                       ),
                     ],
                   )
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 30,),
                 Container(
-                  height: 50,
+                  height: 60,
                   decoration: BoxDecoration(
                       color:Colors.white,
                       border: Border.all(
@@ -232,10 +274,10 @@ class _AddMedState extends State<AddMed> {
                       )
                   ),
                 ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                 Container(
                   //width: 165,
-                  height: 50,
+                  height: 60,
                   decoration: BoxDecoration(
                       color:Colors.white,
                       border: Border.all(
@@ -286,11 +328,11 @@ class _AddMedState extends State<AddMed> {
                     },
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 30,),
                 Row(children: [
                   Expanded(child: Container(
                     width: 150,
-                    height: 50,
+                    height: 60,
                     decoration: BoxDecoration(
                         color:Colors.white,
                       border: Border.all(
@@ -346,44 +388,118 @@ class _AddMedState extends State<AddMed> {
               ],
             ),
           ),
-          SizedBox(height: 50),
+          Container(
+              width: w,
+              margin: const EdgeInsets.only(left:20, right:20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  SizedBox(height: 30),
+              Text(
+                "Frequency",
+                style: TextStyle(
+                  fontSize: 20,
+                  color:Colors.grey[500],
+                ),
+              ),
+            ],
+              ),
+          ),
+          SizedBox(height: 20,),
+          Container(
+            child: WeekdaySelector(
+              onChanged: (int day) {
+                setState(() {
+                  final index = day % 7;
+                  values[index] = !values[index];
+                  /*for (int i = 0; i < 7; i++) {
+                    print(values[i]);
+                    print(" ");
+                  }*/
+                });
+              },
+              values: values,
+              selectedFillColor: Colors.black,
+              firstDayOfWeek: 0,
+            ),
+          ),
+          SizedBox(height: 30,),
+          Container(
+            width: w,
+            margin: const EdgeInsets.only(left:20, right:20),
+            height: 70,
+            decoration: BoxDecoration(
+                color:Colors.white,
+                border: Border.all(
+                  color: Colors.grey,
+                )
+            ),
+            child: TextField(
+              controller: timeController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.access_time_outlined, size: 35),
+                hintText: "Daily",
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color:Colors.white,
+                      width: 1.0
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color:Colors.white,
+                    width: 1.0,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                ),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          SizedBox(height: 40),
           GestureDetector(
             onTap: (){
               FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').add({
                 'MedName' : nameController.text.trim(),
                 'MedType': typeMed(),
                 'StartDate': dateInput.text.trim(),
+                'Quantity': quantityController.text.trim(),
                 'Units': selectedValue,
+                'Days': medDays(),
+                'Time': timeController.text.trim(),
               });
               _navigateToList(context);
             },
             child: Container(
-                width: w * 0.5,
-                height: h * 0.08,
+                width: w * 0.3,
+                height: h * 0.05,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(
+                  //borderRadius: BorderRadius.circular(30),
+                  /*image: DecorationImage(
                       image: AssetImage(
                           "img/mesh.png"
                       ),
                       fit: BoxFit.cover
-                  ),
+                  ),*/
+                  color: Colors.black,
                 ),
                 child: Center(
                   child: Text(
                       "Add",
                       style: TextStyle(
-                        fontSize: 36,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color:Colors.white,
                       )
                   ),
-                )
+                ),
             ),
           ),
+          SizedBox(height: 20,),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
+      /*bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
             IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
@@ -398,8 +514,8 @@ class _AddMedState extends State<AddMed> {
             }),
           ],
         ),
+      ),*/
       ),
-
     );
   }
 }
