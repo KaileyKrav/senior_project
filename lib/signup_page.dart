@@ -3,23 +3,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:senior_project/auth_controller.dart';
+import 'package:lottie/lottie.dart';
 
-//Using sample UI from a tutorial, Will change later
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
+
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Column(
+      body: /*Column(
         children: [
           Container(
               width: w,
@@ -44,6 +49,17 @@ class SignUpPage extends StatelessWidget {
                 ),
               ],
             ),
+          ),*/
+      Column(
+        children: [
+          Container(
+            width: w,
+            height: h * 0.3,
+            child: Lottie.asset(
+                'img/lf30_editor_beeaz8xs.json',
+                repeat: true,
+                fit: BoxFit.cover
+            ),
           ),
           Container(
             width: w,
@@ -51,7 +67,24 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 50,),
+                Text(
+                  "Sign Up",
+                  style: TextStyle(
+                    fontSize: 70,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(71, 96, 101, 1.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: w,
+            margin: const EdgeInsets.only(left:20, right:20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 60,),
                 Container(
                   decoration: BoxDecoration(
                       color:Colors.white,
@@ -69,7 +102,7 @@ class SignUpPage extends StatelessWidget {
                       controller: emailController,
                       decoration: InputDecoration(
                         hintText: "Email Address",
-                          prefixIcon: Icon(Icons.email, color:Color.fromRGBO(252, 198, 205, 100)),
+                          prefixIcon: Icon(Icons.email, color:Color.fromRGBO(240, 172, 159, 1.0)),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -108,7 +141,7 @@ class SignUpPage extends StatelessWidget {
                       controller: passwordController,
                       decoration: InputDecoration(
                           hintText: "Password",
-                          prefixIcon: Icon(Icons.password_outlined, color:Color.fromRGBO(252, 198, 205, 100)),
+                          prefixIcon: Icon(Icons.password_outlined, color:Color.fromRGBO(240, 172, 159, 1.0)),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
@@ -134,10 +167,27 @@ class SignUpPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 70,),
-          GestureDetector(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color.fromRGBO(240, 172, 159, 1.0),
+              shape: StadiumBorder(),
+            ),
+            onPressed: (){
+              auth.createUserWithEmailAndPassword(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim()).then((value) {
+                FirebaseFirestore.instance.collection("UserData").doc(value.user?.uid).set({
+                  "email": value.user?.email
+                });
+              }
+              );
+            },
+            child: Icon(Icons.arrow_forward, size: 50, color: Colors.white,)
+          ),
+          /*GestureDetector(
             onTap: () {
               auth.createUserWithEmailAndPassword(
-                  email: emailController.text.trim(), 
+                  email: emailController.text.trim(),
                   password: passwordController.text.trim()).then((value) {
                     FirebaseFirestore.instance.collection("UserData").doc(value.user?.uid).set({
                       "email": value.user?.email
@@ -169,7 +219,7 @@ class SignUpPage extends StatelessWidget {
                   ),
                 )
             ),
-          ),
+          ),*/
           SizedBox(height: 10,),
           RichText(
             text:TextSpan(
@@ -182,7 +232,7 @@ class SignUpPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: w * 0.1),
-        ],
+      ],
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:senior_project/camera_bpm/calc_heart.dart';
 import 'package:senior_project/google_welcome_page.dart';
+import 'package:senior_project/splash.dart';
 import 'package:senior_project/welcome_page.dart';
 
 import 'login_page.dart';
@@ -32,13 +33,15 @@ class AuthController extends GetxController {
     }*/
     if(user == null) {
       print("login page");
-      Get.offAll(()=>LoginPage());
+      //Get.offAll(()=>LoginPage());
+      Get.offAll(()=>Splash());
     }
     //else if (pass == false){
       //Get.offAll(()=>GoogleWelcomePage());
     //}
     else {
-      Get.offAll(()=>WelcomePage(email:user.email!));
+      //Get.offAll(()=>WelcomePage(email:user.email?));
+      Get.offAll(()=>WelcomePage());
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:senior_project/auth_controller.dart';
 import 'package:senior_project/google_sign_in.dart';
@@ -9,7 +10,6 @@ import 'package:senior_project/signup_page.dart';
 
 import 'camera_bpm/calc_heart.dart';
 
-//Using sample UI from a tutorial, Will change later
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -33,14 +33,10 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               width: w,
               height: h * 0.3,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    //"img/loginimg.png"
-                    "img/svg.png"
-                  ),
-                  fit: BoxFit.cover
-                ),
+              child: Lottie.asset(
+                'img/lf30_editor_beeaz8xs.json',
+                repeat: true,
+                fit: BoxFit.cover
               ),
             ),
             Container(
@@ -53,7 +49,8 @@ class _LoginPageState extends State<LoginPage> {
                     "Hello",
                     style: TextStyle(
                       fontSize: 70,
-                      fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(71, 96, 101, 1.0),
                     ),
                   ),
                   Text(
@@ -81,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: emailController,
                       decoration: InputDecoration(
                           hintText: "Email Address",
-                          prefixIcon: Icon(Icons.email, color:Color.fromRGBO(252, 198, 205, 100)),
+                          prefixIcon: Icon(Icons.email, color:Color.fromRGBO(240, 172, 159, 1.0)),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
@@ -120,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: passwordController,
                         decoration: InputDecoration(
                             hintText: "Password",
-                            prefixIcon: Icon(Icons.password, color:Color.fromRGBO(252, 198, 205, 100)),
+                            prefixIcon: Icon(Icons.password, color:Color.fromRGBO(240, 172, 159, 1.0)),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide(
@@ -142,62 +139,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(child: Container(),),
-                      /*Text(
-                        "Sign in to your account",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color:Colors.grey[500]
-                        ),
-                      ),*/
-                    ]
-                  ),
-                  /*ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        onPrimary: Colors.black,
-                        minimumSize: Size(double.infinity, 50),
-                      ),
-                      icon: FaIcon(FontAwesomeIcons.google, color: Colors.black),
-                      label: Text('Sign in with Google'),
-                      onPressed: () {
-                        final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                        provider.googleLogin();
-                      },
-                  ),*/
                 ],
               ),
             ),
             SizedBox(height: 50,),
-            GestureDetector(
-              onTap: (){
-                AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
-              },
-              child: Container(
-                  width: w * 0.5,
-                  height: h * 0.08,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                      image: DecorationImage(
-                          image: AssetImage(
-                              "img/mesh.png"
-                          ),
-                          fit: BoxFit.cover
-                      ),
-                  ),
-                child: Center(
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color:Colors.white,
-                    )
-                  ),
-                )
-              ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Color.fromRGBO(240, 172, 159, 1.0),
+                    shape: StadiumBorder(),
+                ),
+                onPressed: (){
+                  AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
+                },
+              child: const Text('Sign In', style: TextStyle(
+              fontSize: 40,),
+            ),
             ),
             SizedBox(height: w * 0.1),
             RichText(text: TextSpan(
@@ -211,12 +167,11 @@ class _LoginPageState extends State<LoginPage> {
                 text: " Create",
                   //text: "Heart Rate Test",
                 style: TextStyle(
-                  color:Colors.black,
+                  color:Color.fromRGBO(71, 96, 101, 1.0),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 recognizer: TapGestureRecognizer()..onTap=()=>Get.to(()=>SignUpPage())
-                //recognizer: TapGestureRecognizer()..onTap=()=>Get.to(()=>CalcHeartPage())
                 ),
               ]
             ),
