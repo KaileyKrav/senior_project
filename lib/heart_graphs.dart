@@ -43,11 +43,16 @@ class HeartGraphs extends StatelessWidget {
   ];
 
   String? uid = FirebaseAuth.instance.currentUser?.uid;
+  var bpmController = TextEditingController();
+  var dateInput = TextEditingController();
+  var timeInput = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     DateTime now = DateTime.now();
+    TimeOfDay initialTime = TimeOfDay.now();
     String todayDate = DateFormat('yMd').format(now);
     int todayWeek = now.weekday;
 
@@ -60,7 +65,254 @@ class HeartGraphs extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
                   onTap: () {
-                    _navigateToBluetooth(context);
+                    //_navigateToBluetooth(context);
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 200,
+                          color: Colors.white,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                  child: const Text('Add', style: TextStyle(
+                                    fontSize: 30,
+                                  ),),
+                                  alignment: Alignment.topCenter,),
+                                Container(
+                                  child: const Text('Would you like to connect to a Heart Rate Monitor?', style: TextStyle(
+                                    fontSize: 20,
+                                  ),),
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                ),
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      ElevatedButton(
+                                        child: const Text('No', style: TextStyle(
+                                          fontSize: 20,
+                                        ),),
+                                        onPressed: () => {
+                                          showModalBottomSheet(context: context,
+                                            builder: (BuildContext context) {
+                                              return Container(
+                                                height: 400,
+                                                color: Colors.white,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        child: Text('Heart Rate', style: TextStyle(
+                                                          fontSize: 20,
+                                                        ),),
+                                                        alignment: Alignment.topLeft,
+                                                        padding: EdgeInsets.all(10),
+                                                      ),
+                                                      Container(
+                                                        height: 60,
+                                                        padding: EdgeInsets.only(left: 20, right: 20),
+                                                        decoration: BoxDecoration(
+                                                          color:Colors.white,
+                                                          border: Border.all(
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        child: TextField(
+                                                          controller: bpmController,
+                                                          decoration: InputDecoration(
+                                                            hintText: "Pulse",
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color:Colors.white,
+                                                                  width: 1.0
+                                                              ),
+                                                            ),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color:Colors.white,
+                                                                  width: 1.0
+                                                              ),
+                                                            ),
+                                                            border: OutlineInputBorder(
+                                                              //borderRadius: BorderRadius.circular(20),
+                                                            ),
+                                                          ),
+                                                          keyboardType: TextInputType.number,
+                                                        ),
+                                                        alignment: Alignment.topCenter,
+                                                      ),
+                                                      SizedBox(height: 20,),
+                                                      Container(
+                                                        height: 60,
+                                                        padding: EdgeInsets.only(left: 20, right: 20),
+                                                        decoration: BoxDecoration(
+                                                          color:Colors.white,
+                                                          border: Border.all(
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        child: TextField(
+                                                          controller: dateInput,
+                                                          decoration: InputDecoration(
+                                                            icon: Icon(Icons.calendar_today, size: 25),
+                                                            hintText: "Date",
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color:Colors.white,
+                                                                  width: 1.0
+                                                              ),
+                                                            ),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                color:Colors.white,
+                                                                width: 1.0,
+                                                              ),
+                                                            ),
+                                                            border: OutlineInputBorder(
+                                                            ),
+                                                          ),
+                                                          readOnly: true,
+                                                          onTap: () async {
+                                                            DateTime? pickedDate = await showDatePicker(
+                                                                context: context,
+                                                                initialDate: DateTime.now(),
+                                                                firstDate: DateTime(2000),
+                                                                lastDate: DateTime(2050)
+                                                            );
+
+                                                            if (pickedDate != null) {
+                                                              print(pickedDate);
+                                                              String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                                              print(formattedDate);
+                                                              dateInput.text = formattedDate;
+                                                            }
+                                                            else{
+                                                              print("no date chosen");
+                                                            }
+                                                          },
+                                                        ),
+                                                        alignment: Alignment.topCenter,
+                                                      ),
+                                                      SizedBox(height: 20,),
+                                                      Container(
+                                                        height: 60,
+                                                        padding: EdgeInsets.only(left: 20, right: 20),
+                                                        decoration: BoxDecoration(
+                                                          color:Colors.white,
+                                                          border: Border.all(
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        child: TextField(
+                                                          controller: timeInput,
+                                                          decoration: InputDecoration(
+                                                            icon: Icon(Icons.access_time, size: 25),
+                                                            hintText: "Time",
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color:Colors.white,
+                                                                  width: 1.0
+                                                              ),
+                                                            ),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                color:Colors.white,
+                                                                width: 1.0,
+                                                              ),
+                                                            ),
+                                                            border: OutlineInputBorder(
+                                                            ),
+                                                          ),
+                                                          readOnly: true,
+                                                          onTap: () async {
+                                                            TimeOfDay? pickedTime = await showTimePicker(
+                                                              context: context,
+                                                              initialTime: initialTime,
+                                                            );
+                                                            if (pickedTime != null) {
+                                                              print(pickedTime);
+                                                              timeInput.text = pickedTime.format(context);
+                                                            }
+                                                            else{
+                                                              print("no time chosen");
+                                                            }
+                                                          },
+                                                        ),
+                                                        alignment: Alignment.topCenter,
+                                                      ),
+                                                      Container(
+                                                        child: ElevatedButton(
+                                                          child: const Text('Add', style: TextStyle(
+                                                            fontSize: 20,
+                                                          ),),
+                                                          onPressed: () async {
+
+                                                            List myList = [{
+                                                              'BPM': int.parse(bpmController.text.trim()),
+                                                              'Time': DateTime.now().toUtc(),
+                                                            }
+                                                            ];
+                                                            final snap = await FirebaseFirestore.instance.collection('UserData').doc(uid).collection('HeartRate').get();
+                                                            if (snap.docs.length == 0) {
+                                                              FirebaseFirestore.instance.collection(
+                                                                  'UserData').doc(uid).collection(
+                                                                  'HeartRate').doc('Data').set({
+                                                                'Data': FieldValue.arrayUnion(myList),
+                                                              });
+                                                            }
+                                                            else{
+                                                              FirebaseFirestore.instance.collection(
+                                                                  'UserData').doc(uid).collection(
+                                                                  'HeartRate').doc('Data').update({
+                                                                'Data': FieldValue.arrayUnion(myList),
+                                                              });
+                                                            }
+                                                            Navigator.pop(context);
+                                                            Navigator.pop(context);
+                                                          },
+                                                          style: ElevatedButton.styleFrom(
+                                                              primary: Color.fromRGBO(240, 172, 159, 1.0)
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.grey[500],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      ElevatedButton(
+                                        child: const Text('Yes', style: TextStyle(
+                                          fontSize: 20,
+                                        ),),
+                                        onPressed: () => _navigateToBluetooth(context),
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Color.fromRGBO(240, 172, 159, 1.0)
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  alignment: Alignment.bottomCenter,
+                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: Icon(Icons.add, color: Colors.grey,)
                 ),
@@ -109,12 +361,16 @@ class HeartGraphs extends StatelessWidget {
                               graphBPMList[1][2] = bpmTimeList[iVal][2];
 
                               for (int i = 0; i < arrayLength; i++) {
-                                var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                var check = DateFormat('yyyy-MM-dd').format(check1);
-                                if (check == sun){
-                                  graphBPMList[0][0] = bpmTimeList[i][0];
-                                  graphBPMList[0][1] = bpmTimeList[i][1];
-                                  graphBPMList[0][2] = bpmTimeList[i][2];
+                                if (bpmTimeList[i][0] !='') {
+                                  var check1 = DateTime.parse(
+                                      bpmTimeList[i][0]);
+                                  var check = DateFormat('yyyy-MM-dd').format(
+                                      check1);
+                                  if (check == sun) {
+                                    graphBPMList[0][0] = bpmTimeList[i][0];
+                                    graphBPMList[0][1] = bpmTimeList[i][1];
+                                    graphBPMList[0][2] = bpmTimeList[i][2];
+                                  }
                                 }
                               }
                             }
@@ -131,17 +387,21 @@ class HeartGraphs extends StatelessWidget {
                               graphBPMList[2][2] = bpmTimeList[iVal][2];
 
                               for (int i = 0; i < arrayLength; i++) {
-                                var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                var check = DateFormat('yyyy-MM-dd').format(check1);
-                                if (check == sun){
-                                  graphBPMList[0][0] = bpmTimeList[i][0];
-                                  graphBPMList[0][1] = bpmTimeList[i][1];
-                                  graphBPMList[0][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == mon) {
-                                  graphBPMList[1][0] = bpmTimeList[i][0];
-                                  graphBPMList[1][1] = bpmTimeList[i][1];
-                                  graphBPMList[1][2] = bpmTimeList[i][2];
+                                if (bpmTimeList[i][0] != '') {
+                                  var check1 = DateTime.parse(
+                                      bpmTimeList[i][0]);
+                                  var check = DateFormat('yyyy-MM-dd').format(
+                                      check1);
+                                  if (check == sun) {
+                                    graphBPMList[0][0] = bpmTimeList[i][0];
+                                    graphBPMList[0][1] = bpmTimeList[i][1];
+                                    graphBPMList[0][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == mon) {
+                                    graphBPMList[1][0] = bpmTimeList[i][0];
+                                    graphBPMList[1][1] = bpmTimeList[i][1];
+                                    graphBPMList[1][2] = bpmTimeList[i][2];
+                                  }
                                 }
                               }
                             }
@@ -167,22 +427,26 @@ class HeartGraphs extends StatelessWidget {
                                 graphBPMList[3][2] = bpmTimeList[iVal][2];
 
                                 for (int i = 0; i < arrayLength; i++) {
-                                  var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                  var check = DateFormat('yyyy-MM-dd').format(check1);
-                                  if (check == sun) {
-                                    graphBPMList[0][0] = bpmTimeList[i][0];
-                                    graphBPMList[0][1] = bpmTimeList[i][1];
-                                    graphBPMList[0][2] = bpmTimeList[i][2];
-                                  }
-                                  else if (check == mon) {
-                                    graphBPMList[1][0] = bpmTimeList[i][0];
-                                    graphBPMList[1][1] = bpmTimeList[i][1];
-                                    graphBPMList[1][2] = bpmTimeList[i][2];
-                                  }
-                                  else if (check == tues) {
-                                    graphBPMList[2][0] = bpmTimeList[i][0];
-                                    graphBPMList[2][1] = bpmTimeList[i][1];
-                                    graphBPMList[2][2] = bpmTimeList[i][2];
+                                  if (bpmTimeList[i][0] != '') {
+                                    var check1 = DateTime.parse(
+                                        bpmTimeList[i][0]);
+                                    var check = DateFormat('yyyy-MM-dd').format(
+                                        check1);
+                                    if (check == sun) {
+                                      graphBPMList[0][0] = bpmTimeList[i][0];
+                                      graphBPMList[0][1] = bpmTimeList[i][1];
+                                      graphBPMList[0][2] = bpmTimeList[i][2];
+                                    }
+                                    else if (check == mon) {
+                                      graphBPMList[1][0] = bpmTimeList[i][0];
+                                      graphBPMList[1][1] = bpmTimeList[i][1];
+                                      graphBPMList[1][2] = bpmTimeList[i][2];
+                                    }
+                                    else if (check == tues) {
+                                      graphBPMList[2][0] = bpmTimeList[i][0];
+                                      graphBPMList[2][1] = bpmTimeList[i][1];
+                                      graphBPMList[2][2] = bpmTimeList[i][2];
+                                    }
                                   }
                                 }
                               }
@@ -213,27 +477,31 @@ class HeartGraphs extends StatelessWidget {
                               graphBPMList[4][2] = bpmTimeList[iVal][2];
 
                               for (int i = 0; i < arrayLength; i++) {
-                                var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                var check = DateFormat('yyyy-MM-dd').format(check1);
-                                if (check == sun) {
-                                  graphBPMList[0][0] = bpmTimeList[i][0];
-                                  graphBPMList[0][1] = bpmTimeList[i][1];
-                                  graphBPMList[0][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == mon) {
-                                  graphBPMList[1][0] = bpmTimeList[i][0];
-                                  graphBPMList[1][1] = bpmTimeList[i][1];
-                                  graphBPMList[1][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == tues) {
-                                  graphBPMList[2][0] = bpmTimeList[i][0];
-                                  graphBPMList[2][1] = bpmTimeList[i][1];
-                                  graphBPMList[2][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == wed) {
-                                  graphBPMList[3][0] = bpmTimeList[i][0];
-                                  graphBPMList[3][1] = bpmTimeList[i][1];
-                                  graphBPMList[3][2] = bpmTimeList[i][2];
+                                if (bpmTimeList[i][0] != '') {
+                                  var check1 = DateTime.parse(
+                                      bpmTimeList[i][0]);
+                                  var check = DateFormat('yyyy-MM-dd').format(
+                                      check1);
+                                  if (check == sun) {
+                                    graphBPMList[0][0] = bpmTimeList[i][0];
+                                    graphBPMList[0][1] = bpmTimeList[i][1];
+                                    graphBPMList[0][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == mon) {
+                                    graphBPMList[1][0] = bpmTimeList[i][0];
+                                    graphBPMList[1][1] = bpmTimeList[i][1];
+                                    graphBPMList[1][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == tues) {
+                                    graphBPMList[2][0] = bpmTimeList[i][0];
+                                    graphBPMList[2][1] = bpmTimeList[i][1];
+                                    graphBPMList[2][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == wed) {
+                                    graphBPMList[3][0] = bpmTimeList[i][0];
+                                    graphBPMList[3][1] = bpmTimeList[i][1];
+                                    graphBPMList[3][2] = bpmTimeList[i][2];
+                                  }
                                 }
                               }
                             }
@@ -268,32 +536,36 @@ class HeartGraphs extends StatelessWidget {
                               graphBPMList[5][2] = bpmTimeList[iVal][2];
 
                               for (int i = 0; i < arrayLength; i++) {
-                                var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                var check = DateFormat('yyyy-MM-dd').format(check1);
-                                if (check == sun) {
-                                  graphBPMList[0][0] = bpmTimeList[i][0];
-                                  graphBPMList[0][1] = bpmTimeList[i][1];
-                                  graphBPMList[0][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == mon) {
-                                  graphBPMList[1][0] = bpmTimeList[i][0];
-                                  graphBPMList[1][1] = bpmTimeList[i][1];
-                                  graphBPMList[1][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == tues) {
-                                  graphBPMList[2][0] = bpmTimeList[i][0];
-                                  graphBPMList[2][1] = bpmTimeList[i][1];
-                                  graphBPMList[2][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == wed) {
-                                  graphBPMList[3][0] = bpmTimeList[i][0];
-                                  graphBPMList[3][1] = bpmTimeList[i][1];
-                                  graphBPMList[3][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == thurs) {
-                                  graphBPMList[4][0] = bpmTimeList[i][0];
-                                  graphBPMList[4][1] = bpmTimeList[i][1];
-                                  graphBPMList[4][2] = bpmTimeList[i][2];
+                                if (bpmTimeList[i][0] != '') {
+                                  var check1 = DateTime.parse(
+                                      bpmTimeList[i][0]);
+                                  var check = DateFormat('yyyy-MM-dd').format(
+                                      check1);
+                                  if (check == sun) {
+                                    graphBPMList[0][0] = bpmTimeList[i][0];
+                                    graphBPMList[0][1] = bpmTimeList[i][1];
+                                    graphBPMList[0][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == mon) {
+                                    graphBPMList[1][0] = bpmTimeList[i][0];
+                                    graphBPMList[1][1] = bpmTimeList[i][1];
+                                    graphBPMList[1][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == tues) {
+                                    graphBPMList[2][0] = bpmTimeList[i][0];
+                                    graphBPMList[2][1] = bpmTimeList[i][1];
+                                    graphBPMList[2][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == wed) {
+                                    graphBPMList[3][0] = bpmTimeList[i][0];
+                                    graphBPMList[3][1] = bpmTimeList[i][1];
+                                    graphBPMList[3][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == thurs) {
+                                    graphBPMList[4][0] = bpmTimeList[i][0];
+                                    graphBPMList[4][1] = bpmTimeList[i][1];
+                                    graphBPMList[4][2] = bpmTimeList[i][2];
+                                  }
                                 }
                               }
                             }
@@ -334,37 +606,41 @@ class HeartGraphs extends StatelessWidget {
                               graphBPMList[6][2] = bpmTimeList[iVal][2];
 
                               for (int i = 0; i < arrayLength; i++) {
-                                var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                var check = DateFormat('yyyy-MM-dd').format(check1);
-                                if (check == sun) {
-                                  graphBPMList[0][0] = bpmTimeList[i][0];
-                                  graphBPMList[0][1] = bpmTimeList[i][1];
-                                  graphBPMList[0][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == mon) {
-                                  graphBPMList[1][0] = bpmTimeList[i][0];
-                                  graphBPMList[1][1] = bpmTimeList[i][1];
-                                  graphBPMList[1][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == tues) {
-                                  graphBPMList[2][0] = bpmTimeList[i][0];
-                                  graphBPMList[2][1] = bpmTimeList[i][1];
-                                  graphBPMList[2][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == wed) {
-                                  graphBPMList[3][0] = bpmTimeList[i][0];
-                                  graphBPMList[3][1] = bpmTimeList[i][1];
-                                  graphBPMList[3][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == thurs) {
-                                  graphBPMList[4][0] = bpmTimeList[i][0];
-                                  graphBPMList[4][1] = bpmTimeList[i][1];
-                                  graphBPMList[4][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == fri) {
-                                  graphBPMList[5][0] = bpmTimeList[i][0];
-                                  graphBPMList[5][1] = bpmTimeList[i][1];
-                                  graphBPMList[5][2] = bpmTimeList[i][2];
+                                if (bpmTimeList[i][0] !='') {
+                                  var check1 = DateTime.parse(
+                                      bpmTimeList[i][0]);
+                                  var check = DateFormat('yyyy-MM-dd').format(
+                                      check1);
+                                  if (check == sun) {
+                                    graphBPMList[0][0] = bpmTimeList[i][0];
+                                    graphBPMList[0][1] = bpmTimeList[i][1];
+                                    graphBPMList[0][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == mon) {
+                                    graphBPMList[1][0] = bpmTimeList[i][0];
+                                    graphBPMList[1][1] = bpmTimeList[i][1];
+                                    graphBPMList[1][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == tues) {
+                                    graphBPMList[2][0] = bpmTimeList[i][0];
+                                    graphBPMList[2][1] = bpmTimeList[i][1];
+                                    graphBPMList[2][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == wed) {
+                                    graphBPMList[3][0] = bpmTimeList[i][0];
+                                    graphBPMList[3][1] = bpmTimeList[i][1];
+                                    graphBPMList[3][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == thurs) {
+                                    graphBPMList[4][0] = bpmTimeList[i][0];
+                                    graphBPMList[4][1] = bpmTimeList[i][1];
+                                    graphBPMList[4][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == fri) {
+                                    graphBPMList[5][0] = bpmTimeList[i][0];
+                                    graphBPMList[5][1] = bpmTimeList[i][1];
+                                    graphBPMList[5][2] = bpmTimeList[i][2];
+                                  }
                                 }
                               }
                             }

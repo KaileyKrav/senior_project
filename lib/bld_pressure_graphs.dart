@@ -40,11 +40,17 @@ class BloodPressureGraphs extends StatelessWidget {
   ];
 
   String? uid = FirebaseAuth.instance.currentUser?.uid;
+  var sysController = TextEditingController();
+  var diaController = TextEditingController();
+  var dateInput = TextEditingController();
+  var timeInput = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     DateTime now = DateTime.now();
+    TimeOfDay initialTime = TimeOfDay.now();
     String todayDate = DateFormat('yMd').format(now);
     int todayWeek = now.weekday;
 
@@ -57,7 +63,290 @@ class BloodPressureGraphs extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
                     onTap: () {
-                      _navigateToBluetooth(context);
+                      //_navigateToBluetooth(context);
+                      showModalBottomSheet<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 200,
+                            color: Colors.white,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    child: const Text('Add', style: TextStyle(
+                                      fontSize: 30,
+                                    ),),
+                                    alignment: Alignment.topCenter,),
+                                  Container(
+                                    child: const Text('Would you like to connect to a Blood Pressure Device?', style: TextStyle(
+                                      fontSize: 20,
+                                    ),),
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.only(left: 20, right: 20),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        ElevatedButton(
+                                          child: const Text('No', style: TextStyle(
+                                            fontSize: 20,
+                                          ),),
+                                          onPressed: () => {
+                                            showModalBottomSheet(context: context,
+                                              builder: (BuildContext context) {
+                                                return Container(
+                                                  height: 450,
+                                                  color: Colors.white,
+                                                  child: Center(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Container(
+                                                          child: Text('Blood Pressure', style: TextStyle(
+                                                            fontSize: 20,
+                                                          ),),
+                                                          alignment: Alignment.topLeft,
+                                                          padding: EdgeInsets.all(10),
+                                                        ),
+                                                            Container(
+                                                              height: 60,
+                                                              padding: EdgeInsets.only(left: 20, right: 20),
+                                                              decoration: BoxDecoration(
+                                                                color:Colors.white,
+                                                                border: Border.all(
+                                                                  color: Colors.grey,
+                                                                ),
+                                                              ),
+                                                              child: TextField(
+                                                                controller: sysController,
+                                                                decoration: InputDecoration(
+                                                                  hintText: "SYS",
+                                                                  focusedBorder: OutlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color:Colors.white,
+                                                                        width: 1.0
+                                                                    ),
+                                                                  ),
+                                                                  enabledBorder: OutlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color:Colors.white,
+                                                                        width: 1.0
+                                                                    ),
+                                                                  ),
+                                                                  border: OutlineInputBorder(
+                                                                    //borderRadius: BorderRadius.circular(20),
+                                                                  ),
+                                                                ),
+                                                                keyboardType: TextInputType.number,
+                                                              ),
+                                                              alignment: Alignment.topCenter,
+                                                            ),
+                                                            SizedBox(height: 20,),
+                                                            Container(
+                                                              height: 60,
+                                                              padding: EdgeInsets.only(left: 20, right: 20),
+                                                              decoration: BoxDecoration(
+                                                                color:Colors.white,
+                                                                border: Border.all(
+                                                                  color: Colors.grey,
+                                                                ),
+                                                              ),
+                                                              child: TextField(
+                                                                controller: diaController,
+                                                                decoration: InputDecoration(
+                                                                  hintText: "DIA",
+                                                                  focusedBorder: OutlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color:Colors.white,
+                                                                        width: 1.0
+                                                                    ),
+                                                                  ),
+                                                                  enabledBorder: OutlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color:Colors.white,
+                                                                        width: 1.0
+                                                                    ),
+                                                                  ),
+                                                                  border: OutlineInputBorder(
+                                                                    //borderRadius: BorderRadius.circular(20),
+                                                                  ),
+                                                                ),
+                                                                keyboardType: TextInputType.number,
+                                                              ),
+                                                              alignment: Alignment.topCenter,
+                                                            ),
+                                                        SizedBox(height: 20,),
+                                                        Container(
+                                                          height: 60,
+                                                          padding: EdgeInsets.only(left: 20, right: 20),
+                                                          decoration: BoxDecoration(
+                                                            color:Colors.white,
+                                                            border: Border.all(
+                                                              color: Colors.grey,
+                                                            ),
+                                                          ),
+                                                          child: TextField(
+                                                            controller: dateInput,
+                                                            decoration: InputDecoration(
+                                                              icon: Icon(Icons.calendar_today, size: 25),
+                                                              hintText: "Date",
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color:Colors.white,
+                                                                    width: 1.0
+                                                                ),
+                                                              ),
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                  color:Colors.white,
+                                                                  width: 1.0,
+                                                                ),
+                                                              ),
+                                                              border: OutlineInputBorder(
+                                                              ),
+                                                            ),
+                                                            readOnly: true,
+                                                            onTap: () async {
+                                                              DateTime? pickedDate = await showDatePicker(
+                                                                  context: context,
+                                                                  initialDate: DateTime.now(),
+                                                                  firstDate: DateTime(2000),
+                                                                  lastDate: DateTime(2050)
+                                                              );
+
+                                                              if (pickedDate != null) {
+                                                                print(pickedDate);
+                                                                String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                                                print(formattedDate);
+                                                                dateInput.text = formattedDate;
+                                                              }
+                                                              else{
+                                                                print("no date chosen");
+                                                              }
+                                                            },
+                                                          ),
+                                                          alignment: Alignment.topCenter,
+                                                        ),
+                                                        SizedBox(height: 20,),
+                                                        Container(
+                                                          height: 60,
+                                                          padding: EdgeInsets.only(left: 20, right: 20),
+                                                          decoration: BoxDecoration(
+                                                            color:Colors.white,
+                                                            border: Border.all(
+                                                              color: Colors.grey,
+                                                            ),
+                                                          ),
+                                                          child: TextField(
+                                                            controller: timeInput,
+                                                            decoration: InputDecoration(
+                                                              icon: Icon(Icons.access_time, size: 25),
+                                                              hintText: "Time",
+                                                              focusedBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color:Colors.white,
+                                                                    width: 1.0
+                                                                ),
+                                                              ),
+                                                              enabledBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                  color:Colors.white,
+                                                                  width: 1.0,
+                                                                ),
+                                                              ),
+                                                              border: OutlineInputBorder(
+                                                              ),
+                                                            ),
+                                                            readOnly: true,
+                                                            onTap: () async {
+                                                              TimeOfDay? pickedTime = await showTimePicker(
+                                                                context: context,
+                                                                initialTime: initialTime,
+                                                              );
+                                                              if (pickedTime != null) {
+                                                                print(pickedTime);
+                                                                timeInput.text = pickedTime.format(context);
+                                                              }
+                                                              else{
+                                                                print("no time chosen");
+                                                              }
+                                                            },
+                                                          ),
+                                                          alignment: Alignment.topCenter,
+                                                        ),
+                                                        SizedBox(height: 10,),
+                                                        Container(
+                                                          child: ElevatedButton(
+                                                            child: const Text('Add', style: TextStyle(
+                                                              fontSize: 20,
+                                                            ),),
+                                                            onPressed: () async {
+
+                                                              List myList = [{
+                                                                'SYS': int.parse(sysController.text.trim()),
+                                                                'DIA': int.parse(diaController.text.trim()),
+                                                                'Time': DateTime.now(),
+                                                              }
+                                                              ];
+                                                              final snap = await FirebaseFirestore.instance.collection('UserData').doc(uid).collection('BloodPressure').get();
+                                                              if (snap.docs.length == 0) {
+                                                                FirebaseFirestore.instance.collection(
+                                                                    'UserData').doc(uid).collection(
+                                                                    'BloodPressure').doc('Data').set({
+                                                                  'Data': FieldValue.arrayUnion(myList),
+                                                                });
+                                                              }
+                                                              else{
+                                                                FirebaseFirestore.instance.collection(
+                                                                    'UserData').doc(uid).collection(
+                                                                    'BloodPressure').doc('Data').update({
+                                                                  'Data': FieldValue.arrayUnion(myList),
+                                                                });
+                                                              }
+                                                              Navigator.pop(context);
+                                                              Navigator.pop(context);
+                                                            },
+                                                            style: ElevatedButton.styleFrom(
+                                                                primary: Color.fromRGBO(240, 172, 159, 1.0)
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.grey[500],
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        ElevatedButton(
+                                          child: const Text('Yes', style: TextStyle(
+                                            fontSize: 20,
+                                          ),),
+                                          onPressed: () => _navigateToBluetooth(context),
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Color.fromRGBO(240, 172, 159, 1.0)
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    alignment: Alignment.bottomCenter,
+                                    padding: EdgeInsets.only(left: 20, right: 20),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Icon(Icons.add, color: Colors.grey,)
                 ),
