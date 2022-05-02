@@ -163,8 +163,8 @@ class BluetoothScan extends StatelessWidget {
                                           //print(val);
                                           String bldPres = new String.fromCharCodes(val);
                                           var sysDiaList = bldPres.split('/');
-                                          var sys = sysDiaList[0];
-                                          var dia = sysDiaList[1];
+                                          var sys = int.parse(sysDiaList[0]);
+                                          var dia = int.parse(sysDiaList[1]);
                                           List myList = [{
                                             'SYS': sys,
                                             'DIA': dia,
@@ -240,5 +240,4 @@ class BluetoothScan extends StatelessWidget {
       ),
     );
   }
-
 }

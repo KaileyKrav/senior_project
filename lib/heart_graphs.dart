@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:senior_project/bld_pressure_graphs.dart';
 import 'package:senior_project/test_calendar.dart';
 import 'package:senior_project/welcome_page.dart';
 
@@ -31,8 +32,8 @@ class HeartGraphs extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestCalendar()));
   }
 
-  void _navigateToHeart(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CalcHeartPage()));
+  void _navigateToBP(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => BloodPressureGraphs()));
   }
 
 
@@ -450,21 +451,6 @@ class HeartGraphs extends StatelessWidget {
                         print('BPM $i: ' + doc['Data'][i]['BPM'].toString());
                         print('');*/
                       }
-                      FlSpot spotData(int x) {
-                        /*for (int i = 0; i < arrayLength; i++) {
-                          var bpm1 = int.parse(bpmTimeList[i][2]);
-                          double bpm2 = bpm1.toDouble();
-                          var day1 = int.parse(bpmTimeList[i][1]);
-                          double day2 = day1.toDouble();
-                          return FlSpot(day2, bpm2);
-                        }
-                        return FlSpot(0, 0);*/
-                          var bpm1 = int.parse(graphBPMList[x][2]);
-                          double bpm2 = bpm1.toDouble();
-                          var day1 = int.parse(graphBPMList[x][1]);
-                          double day2 = day1.toDouble();
-                          return FlSpot(day2, bpm2);
-                      }
 
                       List<FlSpot>spotList(int x) {
                         List<FlSpot>sList = [];
@@ -475,7 +461,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -492,7 +478,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -516,7 +502,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -547,7 +533,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -585,7 +571,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -630,7 +616,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -682,7 +668,7 @@ class HeartGraphs extends StatelessWidget {
                               double bpm2 = bpm1.toDouble();
                               var day1 = int.parse(graphBPMList[0][1]);
                               double day2 = day1.toDouble();
-                              sList.add(FlSpot(day2, bpm2));
+                              sList.add(FlSpot(0, bpm2));
                             }
 
                             if (graphBPMList[1][0] != '') {
@@ -791,17 +777,13 @@ class HeartGraphs extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    maxX: 8,
+                                    maxX: 7,
                                     maxY: 120,
                                     minX: 0,
                                     minY: 60,
                                     lineBarsData: [
                                       LineChartBarData(
-                                        spots: spotList(todayWeek), /*[
-                                          if (todayWeek == 1)
-                                            spotData(0),
-                                            spotData(1),
-                                        ],*/
+                                        spots: spotList(todayWeek),
                                         isCurved: true,
                                         gradient: LinearGradient(
                                           colors: gradientColors,
@@ -903,7 +885,7 @@ class HeartGraphs extends StatelessWidget {
             }),
             Spacer(),
             IconButton(icon: Icon(Icons.sticky_note_2_outlined, color: Colors.grey), onPressed: () {
-              //_navigateToHeart(context);
+              _navigateToBP(context);
             }),
           ],
         ),
@@ -919,7 +901,7 @@ class HeartGraphs extends StatelessWidget {
     );
     Widget ?text;
     switch(value.toInt()) {
-      case 7 :
+      case 0 :
         text = const Text('S', style: style,);
         break;
       case 1 :
