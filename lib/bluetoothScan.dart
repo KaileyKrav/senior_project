@@ -14,6 +14,8 @@ class BluetoothScan extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    
     return Scaffold(
       body: Column(
         children: [
@@ -35,12 +37,12 @@ class BluetoothScan extends StatelessWidget {
             flutterBlue.startScan(timeout: Duration(seconds: 4));
 
             // Listen to scan results
-            var subscription = flutterBlue.scanResults.listen((results) {
+            /*var subscription = flutterBlue.scanResults.listen((results) {
               // do something with scan results
               for (ScanResult r in results) {
                 print('${r.device.name} found! rssi: ${r.rssi}');
               }
-            });
+            });*/
 
             // Stop scanning
             flutterBlue.stopScan();
@@ -92,17 +94,35 @@ class BluetoothScan extends StatelessWidget {
                                     for (BluetoothCharacteristic c in characteristics) {
                                       //print(c.uuid.toString());
                                       if (c.uuid.toString() == '00002a37-0000-1000-8000-00805f9b34fb') {
-                                        print('characteristic uuid');
-                                        //if (c.properties.read) {
-                                        List<int> val = await c.read();
-                                        print(val);
-                                        List myList = [{
-                                          'BPM': val[0],
-                                          'Time': DateTime.now().toUtc(),
-                                        }];
-                                        FirebaseFirestore.instance.collection('UserData').doc(uid).collection('HeartRate').doc('Data').update({
-                                          'Data': FieldValue.arrayUnion(myList),
-                                        });
+                                        print('BPM characteristic uuid');
+                                        if (c.properties.read) {
+                                          List<int> val = await c.read();
+                                          //print('value found');
+                                          //print('Value' + val[0].toString());
+                                          List myList = [{
+                                            'BPM': val[0],
+                                            'Time': DateTime.now().toUtc(),
+                                          }
+                                          ];
+                                          //print(myList);
+                                          final snap = await FirebaseFirestore.instance.collection('UserData').doc(uid).collection('HeartRate').get();
+                                          if (snap.docs.length == 0) {
+                                            FirebaseFirestore.instance.collection(
+                                                'UserData').doc(uid).collection(
+                                                'HeartRate').doc('Data').set({
+                                              'Data': FieldValue.arrayUnion(
+                                                  myList),
+                                            });
+                                          }
+                                          else{
+                                            FirebaseFirestore.instance.collection(
+                                                'UserData').doc(uid).collection(
+                                                'HeartRate').doc('Data').update({
+                                              'Data': FieldValue.arrayUnion(
+                                                  myList),
+                                            });
+                                          }
+                                        }
                                           /*await c.setNotifyValue(true);
                                           c.value.listen((value) async {
                                             //value = await c.read();
@@ -128,6 +148,47 @@ class BluetoothScan extends StatelessWidget {
                                         /*else {
                                           print('read property not set');
                                         }*/
+                                      }
+                                    }
+                                  }
+                                  if (service.uuid.toString() == '00001810-0000-1000-8000-00805f9b34fb') {
+                                    print('BLD Pressure uuid');
+                                    var characteristics = service.characteristics;
+                                    for (BluetoothCharacteristic c in characteristics) {
+                                      if (c.uuid.toString() == '00002a35-0000-1000-8000-00805f9b34fb') {
+                                        print('BLD characteristic uuid');
+                                        if (c.properties.read) {
+                                          List<int> val = await c.read();
+                                          //print('value found');
+                                          //print(val);
+                                          String bldPres = new String.fromCharCodes(val);
+                                          var sysDiaList = bldPres.split('/');
+                                          var sys = sysDiaList[0];
+                                          var dia = sysDiaList[1];
+                                          List myList = [{
+                                            'SYS': sys,
+                                            'DIA': dia,
+                                            'Time': DateTime.now().toUtc(),
+                                          }
+                                          ];
+                                          final snap = await FirebaseFirestore.instance.collection('UserData').doc(uid).collection('BloodPressure').get();
+                                          if (snap.docs.length == 0) {
+                                            FirebaseFirestore.instance.collection(
+                                                'UserData').doc(uid).collection(
+                                                'BloodPressure').doc('Data').set({
+                                              'Data': FieldValue.arrayUnion(
+                                                  myList),
+                                            });
+                                          }
+                                          else{
+                                            FirebaseFirestore.instance.collection(
+                                                'UserData').doc(uid).collection(
+                                                'BloodPressure').doc('Data').update({
+                                              'Data': FieldValue.arrayUnion(
+                                                  myList),
+                                            });
+                                          }
+                                        }
                                       }
                                     }
                                   }

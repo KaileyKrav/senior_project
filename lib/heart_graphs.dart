@@ -86,6 +86,7 @@ class HeartGraphs extends StatelessWidget {
                       //print(arrayLength);
                       var bpmTimeList = List.generate(arrayLength, (i) => List.filled(3, '', growable: false), growable: false);
                       var graphBPMList = List.generate(7, (i) => List.filled(3, '', growable: false), growable: false);
+                      outerLoop:
                       for (int i = 0; i < arrayLength; i++) {
                         bpmTimeList[i][0] = DateTime.parse(doc['Data'][i]['Time'].toDate().toString()).toUtc().toString();
                         int date = DateTime.parse(doc['Data'][i]['Time'].toDate().toString()).toUtc().weekday;
@@ -403,42 +404,47 @@ class HeartGraphs extends StatelessWidget {
                               graphBPMList[0][2] = bpmTimeList[iVal][2];
 
                               for (int i = 0; i < arrayLength; i++) {
-                                var check1 = DateTime.parse(bpmTimeList[i][0]);
-                                var check = DateFormat('yyyy-MM-dd').format(check1);
-                                if (check == mon) {
-                                  graphBPMList[1][0] = bpmTimeList[i][0];
-                                  graphBPMList[1][1] = bpmTimeList[i][1];
-                                  graphBPMList[1][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == tues) {
-                                  graphBPMList[2][0] = bpmTimeList[i][0];
-                                  graphBPMList[2][1] = bpmTimeList[i][1];
-                                  graphBPMList[2][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == wed) {
-                                  graphBPMList[3][0] = bpmTimeList[i][0];
-                                  graphBPMList[3][1] = bpmTimeList[i][1];
-                                  graphBPMList[3][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == thurs) {
-                                  graphBPMList[4][0] = bpmTimeList[i][0];
-                                  graphBPMList[4][1] = bpmTimeList[i][1];
-                                  graphBPMList[4][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == fri) {
-                                  graphBPMList[5][0] = bpmTimeList[i][0];
-                                  graphBPMList[5][1] = bpmTimeList[i][1];
-                                  graphBPMList[5][2] = bpmTimeList[i][2];
-                                }
-                                else if (check == sat) {
-                                  graphBPMList[6][0] = bpmTimeList[i][0];
-                                  graphBPMList[6][1] = bpmTimeList[i][1];
-                                  graphBPMList[6][2] = bpmTimeList[i][2];
+                                if (bpmTimeList[i][0] != '') {
+                                  var check1 = DateTime.parse(
+                                      bpmTimeList[i][0]);
+                                  var check = DateFormat('yyyy-MM-dd').format(
+                                      check1);
+                                  if (check == mon) {
+                                    graphBPMList[1][0] = bpmTimeList[i][0];
+                                    graphBPMList[1][1] = bpmTimeList[i][1];
+                                    graphBPMList[1][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == tues) {
+                                    graphBPMList[2][0] = bpmTimeList[i][0];
+                                    graphBPMList[2][1] = bpmTimeList[i][1];
+                                    graphBPMList[2][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == wed) {
+                                    graphBPMList[3][0] = bpmTimeList[i][0];
+                                    graphBPMList[3][1] = bpmTimeList[i][1];
+                                    graphBPMList[3][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == thurs) {
+                                    graphBPMList[4][0] = bpmTimeList[i][0];
+                                    graphBPMList[4][1] = bpmTimeList[i][1];
+                                    graphBPMList[4][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == fri) {
+                                    graphBPMList[5][0] = bpmTimeList[i][0];
+                                    graphBPMList[5][1] = bpmTimeList[i][1];
+                                    graphBPMList[5][2] = bpmTimeList[i][2];
+                                  }
+                                  else if (check == sat) {
+                                    graphBPMList[6][0] = bpmTimeList[i][0];
+                                    graphBPMList[6][1] = bpmTimeList[i][1];
+                                    graphBPMList[6][2] = bpmTimeList[i][2];
+                                  }
                                 }
                               }
                             }
                             break;
                           }
+                          break outerLoop;
                         }
                         /*print('Time $i: ' + doc['Data'][i]['Time'].toString());
                         print('BPM $i: ' + doc['Data'][i]['BPM'].toString());
@@ -471,11 +477,13 @@ class HeartGraphs extends StatelessWidget {
                               double day2 = day1.toDouble();
                               sList.add(FlSpot(day2, bpm2));
                             }
-                            var bpm1 = int.parse(graphBPMList[1][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[1][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[1][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[1][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[1][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
                           }
                           break;
                           case 2: {
@@ -493,11 +501,13 @@ class HeartGraphs extends StatelessWidget {
                               double day2 = day1.toDouble();
                               sList.add(FlSpot(day2, bpm2));
                             }
-                            var bpm1 = int.parse(graphBPMList[2][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[2][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[2][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[2][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[2][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
                           }
                           break;
                           case 3: {
@@ -522,11 +532,13 @@ class HeartGraphs extends StatelessWidget {
                               double day2 = day1.toDouble();
                               sList.add(FlSpot(day2, bpm2));
                             }
-                            var bpm1 = int.parse(graphBPMList[3][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[3][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[3][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[3][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[3][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
                           }
                           break;
                           case 4: {
@@ -558,11 +570,13 @@ class HeartGraphs extends StatelessWidget {
                               double day2 = day1.toDouble();
                               sList.add(FlSpot(day2, bpm2));
                             }
-                            var bpm1 = int.parse(graphBPMList[4][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[4][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[4][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[4][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[4][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
                           }
                           break;
                           case 5: {
@@ -601,11 +615,13 @@ class HeartGraphs extends StatelessWidget {
                               double day2 = day1.toDouble();
                               sList.add(FlSpot(day2, bpm2));
                             }
-                            var bpm1 = int.parse(graphBPMList[5][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[5][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[5][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[5][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[5][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
                           }
                           break;
                           case 6: {
@@ -651,19 +667,23 @@ class HeartGraphs extends StatelessWidget {
                               double day2 = day1.toDouble();
                               sList.add(FlSpot(day2, bpm2));
                             }
-                            var bpm1 = int.parse(graphBPMList[6][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[6][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[6][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[6][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[6][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
                           }
                           break;
                           case 7: {
-                            var bpm1 = int.parse(graphBPMList[0][2]);
-                            double bpm2 = bpm1.toDouble();
-                            var day1 = int.parse(graphBPMList[0][1]);
-                            double day2 = day1.toDouble();
-                            sList.add(FlSpot(day2, bpm2));
+                            if (graphBPMList[0][0] != '') {
+                              var bpm1 = int.parse(graphBPMList[0][2]);
+                              double bpm2 = bpm1.toDouble();
+                              var day1 = int.parse(graphBPMList[0][1]);
+                              double day2 = day1.toDouble();
+                              sList.add(FlSpot(day2, bpm2));
+                            }
 
                             if (graphBPMList[1][0] != '') {
                               var bpm1 = int.parse(graphBPMList[1][2]);
@@ -831,23 +851,34 @@ class HeartGraphs extends StatelessWidget {
                   return ListView(
                   children: snapshot.data!.docs.map((doc) {
                     int arrayLength2 = doc['Data'].length;
-
-                    for (int i = 0; i < arrayLength2; i++) {
-                      var beats = doc['Data'][i]['BPM'].toString();
-
-                      var checkDate3 = DateTime.parse(doc['Data'][i]['Time'].toDate().toString()).toUtc();
-                      String checkDate4 = DateFormat('yMd').format(checkDate3);
-                      if (checkDate4 == todayDate) {
-                        return Card(
-                            child: ListTile(
-                              leading: Icon(Icons.favorite, color: Colors.grey, size: 40,),
-                              title: Text(beats),
-                              subtitle: Text(checkDate4),
-                            ),
-                        );
-                      }
+                    List hearts = [];
+                    int x = 0;
+                      for (int i = 0; i < arrayLength2; i++) {
+                        var beats = doc['Data'][i]['BPM'].toString();
+                        var checkDate3 = DateTime.parse(
+                            doc['Data'][i]['Time'].toDate().toString()).toUtc();
+                        String checkDate4 = DateFormat('yMd').format(
+                            checkDate3);
+                        if (checkDate4 == todayDate) {
+                          hearts.add(heart(beats: beats, date: checkDate4));
+                          x = x + 1;
+                        }
                     }
-                    return Card();
+                    return Container(
+                      child: ListView.builder(
+                        itemCount: hearts.length,
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemBuilder: (context, index) => Card(
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.favorite, color: Colors.grey, size: 40,),
+                            title: Text("${hearts[index].beats}"),
+                            subtitle: Text("${hearts[index].date}"),
+                          ),
+                        ),
+                    ),
+                    );
                   }).toList(),
                   );
                 }
@@ -938,4 +969,13 @@ class HeartGraphs extends StatelessWidget {
     }
     return Text(text, style: style, textAlign: TextAlign.left);
   }
+}
+
+class heart {
+
+  String? beats;
+  String? date;
+
+  heart({this.beats,this.date});
+
 }
