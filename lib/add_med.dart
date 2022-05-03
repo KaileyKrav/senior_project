@@ -120,18 +120,7 @@ medDays() {
       body: SingleChildScrollView(
         child: Column(
         children: [
-          Container(
-            width: w,
-            height: h * 0.3,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                      "img/svg.png"
-                  ),
-                  fit: BoxFit.cover
-              ),
-            ),
-          ),
+          SizedBox(height: 35,),
             Container(
               width: w,
               margin: const EdgeInsets.only(left:20, right:20),
@@ -144,7 +133,7 @@ medDays() {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Color.fromRGBO(139, 193, 188, 1),
               ),
             )
             ],
@@ -237,7 +226,7 @@ medDays() {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
-                          onPrimary: Colors.black,
+                          onPrimary: Color.fromRGBO(139, 193, 188, 1),
                         ),
                       ),
                     ],
@@ -419,7 +408,7 @@ medDays() {
                 });
               },
               values: values,
-              selectedFillColor: Colors.black,
+              selectedFillColor: Color.fromRGBO(139, 193, 188, 1),
               firstDayOfWeek: 0,
             ),
           ),
@@ -482,7 +471,7 @@ medDays() {
                       ),
                       fit: BoxFit.cover
                   ),*/
-                  color: Colors.black,
+                  color: Color.fromRGBO(139, 193, 188, 1),
                 ),
                 child: Center(
                   child: Text(
@@ -499,22 +488,6 @@ medDays() {
           SizedBox(height: 20,),
         ],
       ),
-      /*bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: [
-            IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
-              _navigateToList(context);
-            }),
-            Spacer(),
-            IconButton(icon: Icon(Icons.calendar_today), onPressed: () {
-              _navigateToCalendar(context);
-            }),
-            IconButton(icon: Icon(Icons.favorite), onPressed: () {
-              _navigateToHeart(context);
-            }),
-          ],
-        ),
-      ),*/
       ),
     );
   }

@@ -2,6 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+
+import '../med_list.dart';
+import '../test_calendar.dart';
+import '../welcome_page.dart';
+import 'edit_med.dart';
 
 class DetailsScreen extends StatefulWidget {
   final docID;
@@ -12,6 +18,23 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+
+  void _navigateToList(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => MedList()));
+  }
+
+  void _navigateToCalendar(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => TestCalendar()));
+  }
+
+  void _navigateToHome(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => WelcomePage()));
+  }
+
+
   final docID;
   _DetailsScreenState(this.docID);
 
@@ -29,6 +52,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
+  Container picture(String type) {
+    if (type == 'Pill') {
+      return Container(
+        //width: 50,
+        height: 200,
+        child: Lottie.asset(
+            'img/pill.json',
+            repeat: true,
+            fit: BoxFit.scaleDown
+        ),
+      );
+    }
+    else if (type == 'Liquid') {
+      return Container(
+        //width: 50,
+        height: 200,
+        child: Lottie.asset(
+            'img/liquid.json',
+            repeat: true,
+            fit: BoxFit.scaleDown
+        ),
+      );
+    }
+    else {
+      return Container(
+        //width: 50,
+        height: 200,
+        child: Lottie.asset(
+            'img/vaccine.json',
+            repeat: true,
+            fit: BoxFit.scaleDown
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -37,21 +96,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-          Container(
-          width: w,
-          height: h * 0.3,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(
-                    "img/svg.png"
+            AppBar(
+              actions: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditMed(docID)));
+                      },
+                      child: Icon(Icons.edit, color: Colors.grey,)
+                  ),
                 ),
-                fit: BoxFit.cover
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: GestureDetector(
+                      onTap: () {
+                        FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').doc(docID).delete();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MedList()));
+                      },
+                      child: Icon(Icons.delete, color: Colors.grey,),
+                  ),
+                ),
+              ],
+              backgroundColor: Colors.white,
             ),
-          ),
-        ),
             Container(
+              alignment: Alignment.center,
               width: w,
-                margin: const EdgeInsets.only(left:20, right:20),
+                margin: const EdgeInsets.only(left:20, right:20, top: 60),
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').doc(docID).snapshots(),
                 builder: (BuildContext context, AsyncSnapshot <DocumentSnapshot> snapshot) {
@@ -69,16 +141,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       return daysList;}
                     return Column(
                       children: [
-                        Container(
-                          width: w,
-                          height: h * 0.2,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: medPic(snapshot.data!['MedType']),
-                                fit: BoxFit.contain,
-                              )
-                          ),
-                        ),
+                        picture(snapshot.data!['MedType']),
                         Container(
                           child: Text(
                             snapshot.data!['MedName'],
@@ -123,7 +186,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   height: 75,
                                   child: Column(
                                     children: [
-                                      Text(snapshot.data!['Time'],
+                                      Text(snapshot.data!['Time'].toString() + ' a day',
                                         style: TextStyle(
                                           fontSize: 20,
                                         ),),
@@ -184,6 +247,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
         ],
       ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(icon: Icon(Icons.home_rounded, color: Colors.grey), onPressed: () {
+              _navigateToHome(context);
+            }),
+            Spacer(),
+            IconButton(icon: Icon(Icons.calendar_today, color: Colors.grey), onPressed: () {
+              _navigateToCalendar(context);
+            }),
+            Spacer(),
+            IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.grey), onPressed: () {
+              _navigateToList(context);
+            }),
+          ],
+        ),
       ),
     );
   }

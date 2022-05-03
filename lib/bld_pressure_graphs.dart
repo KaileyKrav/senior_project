@@ -35,8 +35,10 @@ class BloodPressureGraphs extends StatelessWidget {
 
 
   List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
+    //const Color(0xff23b6e6),
+    //const Color(0xff02d39a),
+    const Color.fromRGBO(139, 193, 188, 1),
+    const Color.fromRGBO(188, 255, 249, 1),
   ];
 
   String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -1377,7 +1379,7 @@ class BloodPressureGraphs extends StatelessWidget {
                                       sideTitles: SideTitles(
                                         showTitles: true,
                                         interval: 1,
-                                        reservedSize: 35,
+                                        reservedSize: 40,
                                         getTitlesWidget: leftTitleWidgets,
                                       ),
                                     ),
@@ -1424,7 +1426,8 @@ class BloodPressureGraphs extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text("Today's Blood Pressure Data", style: TextStyle(
               fontSize: 20,
-              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(139, 193, 188, 1),
             ),),
           ),
           Expanded(
@@ -1461,7 +1464,7 @@ class BloodPressureGraphs extends StatelessWidget {
                             itemBuilder: (context, index) => Card(
                               child: ListTile(
                                 leading: Icon(
-                                  Icons.favorite, color: Colors.grey, size: 40,),
+                                  Icons.bloodtype_outlined, color: Color.fromRGBO(240, 172, 159, 1.0), size: 40,),
                                 title: Text("${hearts[index].sys} / ${hearts[index].dia}"),
                                 subtitle: Text("${hearts[index].date}"),
                               ),
@@ -1489,10 +1492,6 @@ class BloodPressureGraphs extends StatelessWidget {
             Spacer(),
             IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.grey), onPressed: () {
               _navigateToList(context);
-            }),
-            Spacer(),
-            IconButton(icon: Icon(Icons.sticky_note_2_outlined, color: Colors.grey), onPressed: () {
-              _navigateToOS(context);
             }),
           ],
         ),

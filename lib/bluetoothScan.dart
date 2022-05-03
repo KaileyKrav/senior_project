@@ -151,7 +151,7 @@ class BluetoothScan extends StatelessWidget {
                                       }
                                     }
                                   }
-                                  if (service.uuid.toString() == '00001810-0000-1000-8000-00805f9b34fb') {
+                                  else if (service.uuid.toString() == '00001810-0000-1000-8000-00805f9b34fb') {
                                     print('BLD Pressure uuid');
                                     var characteristics = service.characteristics;
                                     for (BluetoothCharacteristic c in characteristics) {
@@ -192,8 +192,45 @@ class BluetoothScan extends StatelessWidget {
                                       }
                                     }
                                   }
+                                  else if (service.uuid.toString() == '00001822-0000-1000-8000-00805f9b34fb') {
+                                    print('Pulse Oximeter uuid');
+                                    var characteristics = service.characteristics;
+                                    for (BluetoothCharacteristic c in characteristics) {
+                                      //print(c.uuid.toString());
+                                      if (c.uuid.toString() == '00002a62-0000-1000-8000-00805f9b34fb') {
+                                        print('SPO2 characteristic uuid');
+                                        if (c.properties.read) {
+                                          List<int> val = await c.read();
+                                          //print('value found');
+                                          //print('Value' + val[0].toString());
+                                          List myList = [{
+                                            'OS': val[0],
+                                            'Time': DateTime.now().toUtc(),
+                                          }
+                                          ];
+                                          //print(myList);
+                                          final snap = await FirebaseFirestore.instance.collection('UserData').doc(uid).collection('OxygenSaturation').get();
+                                          if (snap.docs.length == 0) {
+                                            FirebaseFirestore.instance.collection(
+                                                'UserData').doc(uid).collection(
+                                                'OxygenSaturation').doc('Data').set({
+                                              'Data': FieldValue.arrayUnion(
+                                                  myList),
+                                            });
+                                          }
+                                          else{
+                                            FirebaseFirestore.instance.collection(
+                                                'UserData').doc(uid).collection(
+                                                'OxygenSaturation').doc('Data').update({
+                                              'Data': FieldValue.arrayUnion(
+                                                  myList),
+                                            });
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
                                 });
-
                             },
                           ),
                         ),

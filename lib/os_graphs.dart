@@ -31,8 +31,10 @@ class OxygenSaturationGraphs extends StatelessWidget {
 
 
   List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
+    //const Color(0xff23b6e6),
+    //const Color(0xff02d39a),
+    const Color.fromRGBO(139, 193, 188, 1),
+    const Color.fromRGBO(188, 255, 249, 1),
   ];
 
   String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -1078,7 +1080,8 @@ class OxygenSaturationGraphs extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text("Today's Oxygen Saturation Data", style: TextStyle(
               fontSize: 20,
-              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(139, 193, 188, 1),
             ),),
           ),
           Expanded(
@@ -1114,7 +1117,7 @@ class OxygenSaturationGraphs extends StatelessWidget {
                             itemBuilder: (context, index) => Card(
                               child: ListTile(
                                 leading: Icon(
-                                  Icons.favorite, color: Colors.grey, size: 40,),
+                                  Icons.bubble_chart_outlined, color: Color.fromRGBO(240, 172, 159, 1.0), size: 40,),
                                 title: Text("${hearts[index].os}%"),
                                 subtitle: Text("${hearts[index].date}"),
                               ),
@@ -1142,10 +1145,6 @@ class OxygenSaturationGraphs extends StatelessWidget {
             Spacer(),
             IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.grey), onPressed: () {
               _navigateToList(context);
-            }),
-            Spacer(),
-            IconButton(icon: Icon(Icons.sticky_note_2_outlined, color: Colors.grey), onPressed: () {
-              //_navigateToHeart(context);
             }),
           ],
         ),
@@ -1195,16 +1194,16 @@ class OxygenSaturationGraphs extends StatelessWidget {
     String text;
     switch(value.toInt()) {
       case 70 :
-        text =  '70%';
+        text =  '70';
         break;
       case 80 :
-        text = '80%';
+        text = '80';
         break;
       case 90 :
-        text = '90%';
+        text = '90';
         break;
       case 100 :
-        text = '100%';
+        text = '100';
         break;
       default:
         return Container();

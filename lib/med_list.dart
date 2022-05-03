@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lottie/lottie.dart';
 import 'package:senior_project/test_calendar.dart';
+import 'package:senior_project/welcome_page.dart';
 
 import 'add_med.dart';
 import 'camera_bpm/calc_heart.dart';
@@ -18,14 +20,12 @@ class MedList extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestCalendar()));
   }
 
-  void _navigateToHeart(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CalcHeartPage()));
+  void _navigateToHome(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomePage()));
   }
 
   void _navigateToNextScreen(BuildContext context) {
-    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => Calendar()));
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMed()));
-    //Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestCalendar()));
   }
 
   Icon medIcon(String s) {
@@ -51,19 +51,29 @@ class MedList extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            width: w,
-            height: h * 0.3,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                    //"img/loginimg.png"
-                      "img/svg.png"
-                  ),
-                  fit: BoxFit.cover
+          AppBar(
+            actions: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: GestureDetector(
+                    onTap: () {
+                      _navigateToNextScreen(context);
+                    },
+                    child: Icon(Icons.add, color: Colors.grey,)
+                ),
               ),
-            ),
+            ],
+            backgroundColor: Colors.white,
           ),
+      Container(
+        child: Text('Your Medications', style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(240, 172, 159, 1.0),
+        ),),
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.only(top: 20, left: 10),
+      ),
       Expanded(
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').snapshots(),
@@ -91,7 +101,7 @@ class MedList extends StatelessWidget {
                         children: [ Container(
                           child: Text(days(), style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                           decoration: const BoxDecoration(
-                              color: Colors.lightBlue,
+                              color: Color.fromRGBO(139, 193, 188, 1),
                               borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -100,16 +110,16 @@ class MedList extends StatelessWidget {
                           Container(
                             child: Text(doc['Quantity'].toString() + ' ' + doc['Units'], style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                             decoration: const BoxDecoration(
-                                color: Colors.lightBlue,
+                                color: Color.fromRGBO(139, 193, 188, 1),
                                 borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                           ),
                           Spacer(),
                           Container(
-                            child: Text(doc['Time'], style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                            child: Text(doc['Time'].toString() + ' a Day', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                             decoration: const BoxDecoration(
-                                color: Colors.lightBlue,
+                                color: Color.fromRGBO(139, 193, 188, 1),
                                 borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -132,7 +142,7 @@ class MedList extends StatelessWidget {
                         children: [ Container(
                         child: Text(days(), style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                         decoration: const BoxDecoration(
-                            color: Colors.lightBlue,
+                            color: Color.fromRGBO(139, 193, 188, 1),
                             borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -141,16 +151,16 @@ class MedList extends StatelessWidget {
                           Container(
                             child: Text(doc['Quantity'].toString() + ' ' + doc['Units'], style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                               decoration: const BoxDecoration(
-                                  color: Colors.lightBlue,
+                                  color: Color.fromRGBO(139, 193, 188, 1),
                                   borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                               ),
                               padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                           ),
                           Spacer(),
                           Container(
-                            child: Text(doc['Time'], style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                            child: Text(doc['Time'].toString() + ' a Day', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                             decoration: const BoxDecoration(
-                                color: Colors.lightBlue,
+                                color: Color.fromRGBO(139, 193, 188, 1),
                                 borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -178,7 +188,7 @@ class MedList extends StatelessWidget {
                         children: [ Container(
                           child: Text(days(), style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                           decoration: const BoxDecoration(
-                              color: Colors.lightBlue,
+                              color: Color.fromRGBO(139, 193, 188, 1),
                               borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -187,16 +197,16 @@ class MedList extends StatelessWidget {
                           Container(
                             child: Text(doc['Quantity'].toString() + ' ' + doc['Units'], style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                             decoration: const BoxDecoration(
-                                color: Colors.lightBlue,
+                                color: Color.fromRGBO(139, 193, 188, 1),
                                 borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                           ),
                           Spacer(),
                           Container(
-                            child: Text(doc['Time'], style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                            child: Text(doc['Time'].toString() + ' a Day', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                             decoration: const BoxDecoration(
-                                color: Colors.lightBlue,
+                                color: Color.fromRGBO(139, 193, 188, 1),
                                 borderRadius: BorderRadius.all(Radius.elliptical(10,10))
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -210,17 +220,6 @@ class MedList extends StatelessWidget {
                     ),
                   );
                 }
-                /*return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage:
-                      AssetImage("img/pills_graphic.png"),
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    title: Text(doc['MedName']),
-                  ),
-                );*/
               }).toList(),
             );
         },
@@ -228,25 +227,26 @@ class MedList extends StatelessWidget {
       ),
       ],
       ),
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         onPressed: () {
           _navigateToNextScreen(context);
         },
         backgroundColor: Colors.cyanAccent,
         child: const Icon(Icons.add),
-      ),
+      ),*/
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
-            IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
-              _navigateToList(context);
+            IconButton(icon: Icon(Icons.home_rounded, color: Colors.grey), onPressed: () {
+              _navigateToHome(context);
             }),
             Spacer(),
-            IconButton(icon: Icon(Icons.calendar_today), onPressed: () {
+            IconButton(icon: Icon(Icons.calendar_today, color: Colors.grey), onPressed: () {
               _navigateToCalendar(context);
             }),
-            IconButton(icon: Icon(Icons.favorite), onPressed: () {
-              _navigateToHeart(context);
+            Spacer(),
+            IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.grey), onPressed: () {
+              _navigateToList(context);
             }),
           ],
         ),

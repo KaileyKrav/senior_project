@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:senior_project/heart_graph.dart';
+import 'package:senior_project/profile.dart';
+import 'package:senior_project/welcome_page.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -25,8 +28,12 @@ class _TestCalendarState extends State<TestCalendar> {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestCalendar()));
   }
 
-  void _navigateToHeart(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HeartGraphs()));
+  void _navigateToHome(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomePage()));
+  }
+
+  void _navigateToProfile(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage()));
   }
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -82,30 +89,22 @@ class _TestCalendarState extends State<TestCalendar> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      /*body: SlidingUpPanel(
-      panelBuilder: (ScrollController sc) => _scrollingList(sc),
-          //body: Center(
-        //child: Text("This is the sliding Widget"),
-        //),
-      collapsed: Container(
-        decoration: BoxDecoration(
-          borderRadius: radius
-        ),
-      ),*/
     body: Column(
         children: [
-          Container(
-                width: w,
-                height: h * 0.1,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                          "img/svg.png"
-                      ),
-                      fit: BoxFit.cover
-                  ),
+          AppBar(
+            actions: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: GestureDetector(
+                    onTap: () {
+                      _navigateToProfile(context);
+                    },
+                    child: Icon(Icons.account_circle_outlined, color: Colors.grey,)
                 ),
               ),
+            ],
+            backgroundColor: Colors.white,
+          ),
         Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').snapshots(),
@@ -158,14 +157,14 @@ class _TestCalendarState extends State<TestCalendar> {
                     calendarStyle: CalendarStyle(
                       isTodayHighlighted: true,
                       selectedDecoration: BoxDecoration(
-                        color:Colors.lightBlueAccent,
+                        color:Color.fromRGBO(139, 193, 188, 1),
                         shape: BoxShape.circle,
                       ),
                       selectedTextStyle: TextStyle(
                         color: Colors.white,
                       ),
                       todayDecoration: BoxDecoration(
-                        color: Colors.pink,
+                        color: Color.fromRGBO(240, 172, 159, 1.0),
                         shape: BoxShape.circle,
                       ),
                       todayTextStyle: TextStyle(
@@ -211,8 +210,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                         isReverse: true,
                                         selectedTextColor: Colors.black,
                                         transitionType: TransitionType.LEFT_TO_RIGHT,
-                                        backgroundColor: Colors.black,
-                                        borderColor: Colors.black,
+                                        backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                        borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                         borderRadius: 60,
                                         borderWidth: 1,
                                         onPress: () {
@@ -236,23 +235,6 @@ class _TestCalendarState extends State<TestCalendar> {
                                           );
                                         },
                                       ),
-                                      /*GestureDetector(
-                                        onTap: (){
-                                          var docID = doc.id;
-                                          List myList =[{'Date': _focusedDay, 'Taken': 'Yes'}];
-                                          FirebaseFirestore.instance.collection('UserData').doc(uid).collection('MedicationList').doc(docID).update({
-                                            'Dates' : FieldValue.arrayUnion(myList),
-                                          });
-                                  },
-                                  child: Container(
-                                  child: Text('Taken', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-                                  decoration: const BoxDecoration(
-                                  color: Colors.lightBlue,
-                                  borderRadius: BorderRadius.all(Radius.elliptical(10,10))
-                                  ),
-                                      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                                    ),
-                                      ),*/
                                       Spacer(),
                                       Container(
                                        child: AnimatedButton(
@@ -262,8 +244,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                           isReverse: true,
                                           selectedTextColor: Colors.black,
                                           transitionType: TransitionType.LEFT_TO_RIGHT,
-                                          backgroundColor: Colors.black,
-                                          borderColor: Colors.black,
+                                          backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                          borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                           borderRadius: 60,
                                           borderWidth: 1,
                                           onPress: () {
@@ -297,8 +279,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                           isReverse: true,
                                           selectedTextColor: Colors.black,
                                           transitionType: TransitionType.LEFT_TO_RIGHT,
-                                          backgroundColor: Colors.black,
-                                          borderColor: Colors.black,
+                                          backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                          borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                           borderRadius: 60,
                                           borderWidth: 1,
                                           onPress: () {
@@ -344,8 +326,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                         isReverse: true,
                                         selectedTextColor: Colors.black,
                                         transitionType: TransitionType.LEFT_TO_RIGHT,
-                                        backgroundColor: Colors.black,
-                                        borderColor: Colors.black,
+                                        backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                        borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                         borderRadius: 60,
                                         borderWidth: 1,
                                         onPress: () {
@@ -379,8 +361,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                           isReverse: true,
                                           selectedTextColor: Colors.black,
                                           transitionType: TransitionType.LEFT_TO_RIGHT,
-                                          backgroundColor: Colors.black,
-                                          borderColor: Colors.black,
+                                          backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                          borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                           borderRadius: 60,
                                           borderWidth: 1,
                                           onPress: () {
@@ -414,8 +396,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                           isReverse: true,
                                           selectedTextColor: Colors.black,
                                           transitionType: TransitionType.LEFT_TO_RIGHT,
-                                          backgroundColor: Colors.black,
-                                          borderColor: Colors.black,
+                                          backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                          borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                           borderRadius: 60,
                                           borderWidth: 1,
                                           onPress: () {
@@ -466,8 +448,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                         isReverse: true,
                                         selectedTextColor: Colors.black,
                                         transitionType: TransitionType.LEFT_TO_RIGHT,
-                                        backgroundColor: Colors.black,
-                                        borderColor: Colors.black,
+                                        backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                        borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                         borderRadius: 60,
                                         borderWidth: 1,
                                         onPress: () {
@@ -501,8 +483,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                           isReverse: true,
                                           selectedTextColor: Colors.black,
                                           transitionType: TransitionType.LEFT_TO_RIGHT,
-                                          backgroundColor: Colors.black,
-                                          borderColor: Colors.black,
+                                          backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                          borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                           borderRadius: 60,
                                           borderWidth: 1,
                                           onPress: () {
@@ -536,8 +518,8 @@ class _TestCalendarState extends State<TestCalendar> {
                                           isReverse: true,
                                           selectedTextColor: Colors.black,
                                           transitionType: TransitionType.LEFT_TO_RIGHT,
-                                          backgroundColor: Colors.black,
-                                          borderColor: Colors.black,
+                                          backgroundColor: Color.fromRGBO(240, 172, 159, 1.0),
+                                          borderColor: Color.fromRGBO(240, 172, 159, 1.0),
                                           borderRadius: 60,
                                           borderWidth: 1,
                                           onPress: () {
@@ -580,106 +562,25 @@ class _TestCalendarState extends State<TestCalendar> {
             }
           ),
         ),
-        /*Card(
-        clipBehavior: Clip.antiAlias,
-        margin: const EdgeInsets.all(8.0),
-        child: TableCalendar(
-      //body: TableCalendar(
-        firstDay: DateTime(1990),
-        lastDay: DateTime(2050),
-        focusedDay: _focusedDay,
-        calendarFormat: _calendarFormat,
-        selectedDayPredicate: (day) {
-          // Use `selectedDayPredicate` to determine which day is currently selected.
-          // If this returns true, then `day` will be marked as selected.
-
-          // Using `isSameDay` is recommended to disregard
-          // the time-part of compared DateTime objects.
-          return isSameDay(_selectedDay, day);
-        },
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            // Call `setState()` when updating the selected day
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          }
-        },
-        onFormatChanged: (format) {
-          if (_calendarFormat != format) {
-            // Call `setState()` when updating calendar format
-            setState(() {
-              _calendarFormat = format;
-            });
-          }
-        },
-        onPageChanged: (focusedDay) {
-          // No need to call `setState()` here
-          _focusedDay = focusedDay;
-        },
-          calendarStyle: CalendarStyle(
-            isTodayHighlighted: true,
-            selectedDecoration: BoxDecoration(
-              color:Colors.lightBlueAccent,
-              shape: BoxShape.circle,
-            ),
-            selectedTextStyle: TextStyle(
-              color: Colors.white,
-            ),
-            todayDecoration: BoxDecoration(
-              color: Colors.pink,
-              shape: BoxShape.circle,
-            ),
-            todayTextStyle: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-      ),
-      ),*/
     ],
     ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: [
-            IconButton(icon: Icon(Icons.add_circle_outline), onPressed: () {
-              _navigateToList(context);
+            IconButton(icon: Icon(Icons.home_rounded, color: Colors.grey), onPressed: () {
+              _navigateToHome(context);
             }),
             Spacer(),
-            IconButton(icon: Icon(Icons.calendar_today), onPressed: () {
+            IconButton(icon: Icon(Icons.calendar_today, color: Colors.grey), onPressed: () {
               _navigateToCalendar(context);
             }),
-            IconButton(icon: Icon(Icons.favorite), onPressed: () {
-              _navigateToHeart(context);
+            Spacer(),
+            IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.grey), onPressed: () {
+              _navigateToList(context);
             }),
           ],
         ),
       ),
-     // ),
     );
   }
-
-/*Widget _scrollingList(ScrollController sc){
-    return ListView.builder(
-      controller: sc,
-      itemCount: 3,
-      itemBuilder: (BuildContext context, int i){
-        int j = i + 1;
-        return Container(
-          padding: const EdgeInsets.all(12.0),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundImage:
-                AssetImage("img/pills_graphic.png"),
-              backgroundColor: Colors.white,
-              radius: 30,
-            ),
-            title: Text("Sample Medication" + " $j"),
-            subtitle: Text ("test" + "$j"),
-        ),
-          //child: Text("Medication: " + "$j"),
-        );
-      },
-    );
-  }*/
 }
